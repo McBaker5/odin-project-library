@@ -1,0 +1,12 @@
+.library-container {
+    display: flex;
+    gap: 20px;
+}
+
+.book {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: pink;
+    gap: 8px;
+}
