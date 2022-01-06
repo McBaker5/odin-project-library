@@ -10,3 +10,24 @@
     background-color: pink;
     gap: 8px;
 }
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap: 50px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    background-color: rgba(255,255,0,1);
+    padding: 25px;
+}
+
+.close:hover {
+    cursor: pointer;
+}

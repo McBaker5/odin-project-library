@@ -1,6 +1,20 @@
 let myLibrary = [];
 
 const libraryContainer = document.querySelector('.library-container'); // holds displays of all the book items
+const submitButton = document.querySelector('.submit');
+const titleInput = document.querySelector('.title');
+const authorInput = document.querySelector('.author');
+const pagesInput = document.querySelector('.pages');
+const readInput = document.querySelector('.read');
+const addButton = document.querySelector('.add-button');
+const modal = document.querySelector('.modal');
+const span = document.querySelector('.close');
+
+submitButton.addEventListener('click', submitBook);
+addButton.addEventListener('click', () => {
+    modal.style.display = 'block';
+})
+span.addEventListener('click', closeModal);
 
 function Book(title, author, pages, read=false) {
     this.title = title,
@@ -13,19 +27,23 @@ function Book(title, author, pages, read=false) {
     }
 }
 
-function addBookToLibrary() {
-    const title = prompt("Title: ");
-    const author = prompt("Author: ");
-    const pages = parseInt(prompt("Page count: "));
-    const read = confirm("Read yet?: ");
-    myLibrary.push(new Book(title, author, pages, read));
+Book.prototype.toggleRead = function() {
+    this.read = !this.read;
+}
+
+function closeModal() {
+    modal.style.display = 'none';
+    titleInput.value = '';
+    authorInput.value = '';
+    pagesInput.value = '';
+    readInput.checked = false;
 }
 
 //// make a container in DOM to hold all the book visual items
 function displayBooks() {
     // empty the library
     while (libraryContainer.firstChild) {
-        libraryContainer.removeChild(container.lastChild);
+        libraryContainer.removeChild(libraryContainer.lastChild);
     }
     // create library items to display
     myLibrary.forEach(book => {
@@ -34,24 +52,47 @@ function displayBooks() {
         const authorHolder = document.createElement('div');
         const pageHolder = document.createElement('div');
         const readHolder = document.createElement('div');
+        const readButton = document.createElement('button');
+        const deleteButton = document.createElement('button');
 
         titleHolder.textContent = book.title;
         authorHolder.textContent = book.author;
         pageHolder.textContent = book.pages;
         readHolder.textContent = book.read;
+        readButton.textContent = 'toggle read';
+        deleteButton.textContent = 'Delete';
+
+        bookDiv.dataset.index = myLibrary.indexOf(book);
+        readButton.addEventListener('click', () => {
+            book.toggleRead();
+            readHolder.textContent = book.read;
+        })
+        deleteButton.addEventListener('click', () => {
+            myLibrary.splice(bookDiv.dataset.index, 1);
+            displayBooks();
+        });
 
         bookDiv.classList.add('book');
         bookDiv.appendChild(titleHolder);
         bookDiv.appendChild(authorHolder);
         bookDiv.appendChild(pageHolder);
         bookDiv.appendChild(readHolder);
+        bookDiv.appendChild(readButton);
+        bookDiv.appendChild(deleteButton);
 
         libraryContainer.appendChild(bookDiv);
     });
 }
 
-myLibrary.push(new Book('a','b','1',true));
-myLibrary.push(new Book('c','d','2',false));
-myLibrary.push(new Book('e','f','3'));
+function submitBook() {
+    const book = new Book(titleInput.value, authorInput.value, pagesInput.value, readInput.checked);
+    myLibrary.push(book);
+    displayBooks();
+    closeModal();
+}
+
+myLibrary.push(new Book('Dracula','Bram Stoker','458',true));
+myLibrary.push(new Book('Interview With The Vampire','Anne Rice','350',false));
+myLibrary.push(new Book('Antigone','Sophocles','95',false));
 
 displayBooks();
