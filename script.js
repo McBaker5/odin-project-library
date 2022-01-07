@@ -16,19 +16,20 @@ addButton.addEventListener('click', () => {
 })
 span.addEventListener('click', closeModal);
 
-function Book(title, author, pages, read=false) {
-    this.title = title,
-    this.author = author,
-    this.pages = pages,
-    this.read = read,
-    this.info = function() {
+class Book {
+    constructor(title, author, pages, read) {
+        this.title = title,
+        this.author = author,
+        this.pages = pages,
+        this.read = read
+    };
+    info = function() {
         let ret = `${this.title} by ${author}, ${pages} pages, `;
         return this.read ? (ret + 'read') : (ret + 'not read yet');
+    };
+    toggleRead = function() {
+        this.read = !this.read;
     }
-}
-
-Book.prototype.toggleRead = function() {
-    this.read = !this.read;
 }
 
 function closeModal() {
